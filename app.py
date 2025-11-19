@@ -1,8 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sun Oct 19 01:20:12 2025
-@author: User
-"""
 from flask import Flask, render_template_string, request, redirect, url_for, session
 import webbrowser
 import threading
@@ -30,7 +25,9 @@ def convert_to_embed(url):
 exercises_data = [
     {"name": "仰臥推舉（槓鈴)", "video": "https://www.youtube.com/watch?v=5SSdbmIjNj4", "category": "胸"},
     {"name": "雙槓臂屈伸（寬握）", "video": "https://www.youtube.com/watch?v=h_JsA3tt0vU", "category": "胸"},
-    {"name": "夾胸機 / Pec Deck", "video": "https://www.youtube.com/watch?v=YKk_gkZOGic", "category": "胸"},
+    {"name": "夾胸機", "video": "https://www.youtube.com/watch?v=YKk_gkZOGic", "category": "胸"},
+    {"name": "器械推舉", "video": "https://www.youtube.com/embed/qzqz7ScucAg", "category": "胸"},
+    {"name": "上斜推舉（啞鈴）單手", "video": "https://www.youtube.com/embed/fMNUiQbRqZw", "category": "胸"},
     {"name": "繩索下拉（Triceps Pushdown）", "video": "https://www.youtube.com/watch?v=dvM2IoxpTnI", "category": "手臂"},
     {"name": "繩索臂屈伸", "video": "https://www.youtube.com/watch?v=W53rZyGHLEQ", "category": "手臂"},
     {"name": "引體向上（正握）", "video": "https://www.youtube.com/watch?v=rffAYLTSMJY", "category": "背"},
@@ -341,3 +338,4 @@ if __name__ == "__main__":
     # 運行 Flask 應用程式。當您在 Spyder 中執行此檔案後，
     # 請在瀏覽器中手動輸入：http://127.0.0.1:5000/
     app.run(debug=False)
+
