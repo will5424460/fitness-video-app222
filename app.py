@@ -1,3 +1,8 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sun Oct 19 01:20:12 2025
+@author: User
+"""
 from flask import Flask, render_template_string, request, redirect, url_for, session
 import webbrowser
 import threading
@@ -244,44 +249,50 @@ FAV_TEMPLATE = """
 
 @app.route('/')
 def index():
-    # 取得搜尋關鍵字、分類參數，以及新增的動作名稱參數
+    # 取得搜尋關鍵字、分類參數、動作名稱參數
     keyword = request.args.get("search", "")
     category = request.args.get("category", "")
-    exercise_name = request.args.get("exercise_name", "") # <<< 新增動作名稱參數
-    
-    # 初始化過濾後的列表為所有動作
+    exercise_name = request.args.get("exercise_name", "")
+
+    # 初始化為所有動作
     filtered = exercises_data
-    
-    # 優先篩選邏輯：如果直接選了動作名稱，則只顯示該動作，忽略分類和關鍵字
+
+    # ★ 若選擇了動作名稱 → 忽略其他條件
     if exercise_name:
         filtered = [ex for ex in filtered if ex["name"] == exercise_name]
     else:
-        # 1. 根據分類篩選
+        # ★ 先用分類篩選（若 category 有被選到）
         if category:
             filtered = [ex for ex in filtered if ex["category"] == category]
 
-        # 2. 根據關鍵字篩選
+        # 再來關鍵字搜尋
         if keyword:
             filtered = [ex for ex in filtered if keyword.lower() in ex["name"].lower()]
 
-    # 取得收藏清單
+    # 收藏處理
     favorites = session.get("favorites", [])
     fav_names = [f["name"] for f in favorites]
-    
-    # 取得所有動作名稱供下拉式選單使用
-    all_names = sorted([ex["name"] for ex in exercises_data])
 
-    return render_template_string(HTML_TEMPLATE,
-                                  exercises=filtered,
-                                  keyword=keyword,
-                                  category=category, 
-                                  categories=CATEGORIES, 
-                                  favorites=fav_names,
-                                  fav_count=len(favorites),
-                                  
-                                  # 傳遞新的動作名稱相關變數
-                                  all_exercise_names=all_names,
-                                  selected_exercise=exercise_name)
+    # ★★★ 動作名稱下拉選單的內容（依分類更新）★★★
+    if category:
+        # 只顯示該分類的動作
+        all_names = sorted([ex["name"] for ex in exercises_data if ex["category"] == category])
+    else:
+        # 若未選分類，顯示所有動作
+        all_names = sorted([ex["name"] for ex in exercises_data])
+
+    return render_template_string(
+        HTML_TEMPLATE,
+        exercises=filtered,
+        keyword=keyword,
+        category=category,
+        categories=CATEGORIES,
+        favorites=fav_names,
+        fav_count=len(favorites),
+        all_exercise_names=all_names,     # ★ 更新後的動作列表
+        selected_exercise=exercise_name
+    )
+
 
 
 @app.route('/add_favorite/<name>')
@@ -336,4 +347,3 @@ if __name__ == "__main__":
     # 運行 Flask 應用程式。當您在 Spyder 中執行此檔案後，
     # 請在瀏覽器中手動輸入：http://127.0.0.1:5000/
     app.run(debug=False)
-
