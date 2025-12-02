@@ -154,9 +154,6 @@ HTML_TEMPLATE = """
                     <option value="{{ ex_name }}" {% if selected_exercise == ex_name %}selected{% endif %}>{{ ex_name }}</option>
                 {% endfor %}
             </select>
-            
-            <input type="text" name="search" placeholder="輸入動作名稱搜尋" value="{{ keyword }}">
-            <button type="submit">搜尋</button>
             <a href="/favorites" class="fav-link">查看收藏清單 ({{ fav_count }})</a>
         </form>
 
